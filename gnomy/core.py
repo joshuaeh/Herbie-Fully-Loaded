@@ -285,8 +285,8 @@ class AMY:
         amy_df["days since last snowfall"] = df['Days Since Last Snowfall [Days]'].values
         amy_df["albedo [nondim]"] = df["albedo"]
         amy_df["liquid precipitation depth [mm]"] = df["tp"].values
-        amy_df["liquid precipitation quantity [hr]"] = 
-        # TODO: check is this 1, or how long it has been precipitating?
+        amy_df["liquid precipitation quantity [hr]"] = 1
+        #TODO: check is this 1, or how long it has been precipitating?
         return amy_df  
     
     def _create_header(
