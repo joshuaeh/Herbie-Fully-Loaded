@@ -177,9 +177,9 @@ class AMY:
         cache_dir,
         start_date,
         end_date,
-        freq="1H",
         latitude,
-        longitude
+        longitude,
+        freq="1H"
         ):
         # combine all cache files into one df
         cache_df = utils.combine_cache_files(cache_dir, start_date, end_date, freq=freq)
