@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 from pvlib import location, solarposition
 ## local
-import constants, utils
+from . import constants, utils
 
 # declarations
 logger = logging.getLogger(__name__)
