@@ -589,7 +589,7 @@ def _get_holidays_daylight_savings_string():
     formatted_holidays_daylight_savings = f"HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0"
     return formatted_holidays_daylight_savings
 
-def _format_data_periods(start_date, end_date):
+def _get_data_periods_string(start_date, end_date):
     """format data periods for header line 8. Shows # records per hour then
     period name/description, start day of week, start month/day, end month/day
     for each period if more than one. According to [1], multiple data periods
