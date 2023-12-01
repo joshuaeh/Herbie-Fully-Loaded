@@ -345,204 +345,217 @@ def create_header(start_date, end_date
         string_8,
     ]
 
-        Format: LOCATION,{city},{region},{country},{data type},{WMO code},{latitude},{longitude},{TZ},{altitude}
-        ex: LOCATION,Maxwell Afb,AL,USA,TMY3,722265,32.38,-86.35,-6.0,53.0
+def _get_location_string(
+    city: str,
+    region: str,
+    country: str,
+    data_type: str,
+    WMO_code: str,
+    latitude: float,
+    longitude: float,
+    TZ: float,
+    elevation: float,
+):
+    """create string for header line 1. Location information.
 
-        INPUTS
-        ----------
-        city : str
-            city name
-        region : str
-            region name (State, Province, etc.)
-        country : str
-            country name
-        data_type : str
-            data type. TMY3, TMY2, etc.
-        WMO_code : str
-            WMO code used as alpha in Energy Plus
-        latitude : float
-            latitude of location (-90 to 90) with 0.5 representing 30 minutes
-        longitude : float
-            longitude of location (-180 to 180) with 0.5 representing 30 minutes
-        TZ : float
-            time zone of location relative to GMT (-12.0 to 12.0)
-        elevation : float
-            elevation of location in meters (-1000.0 to 9999.9)
+    Format: LOCATION,{city},{region},{country},{data type},{WMO code},{latitude},{longitude},{TZ},{altitude}
+    ex: LOCATION,Maxwell Afb,AL,USA,TMY3,722265,32.38,-86.35,-6.0,53.0
 
-        OUTPUTS
-        ----------
-        formatted_location : string
-            formatted string for header line 1
+    INPUTS
+    ----------
+    city : str
+        city name
+    region : str
+        region name (State, Province, etc.)
+    country : str
+        country name
+    data_type : str
+        data type. TMY3, TMY2, etc.
+    WMO_code : str
+        WMO code used as alpha in Energy Plus
+    latitude : float
+        latitude of location (-90 to 90) with 0.5 representing 30 minutes
+    longitude : float
+        longitude of location (-180 to 180) with 0.5 representing 30 minutes
+    TZ : float
+        time zone of location relative to GMT (-12.0 to 12.0)
+    elevation : float
+        elevation of location in meters (-1000.0 to 9999.9)
 
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-        """
-        formatted_location = f"LOCATION,{city},{region},{country},{data_type},{WMO_code},{latitude},{longitude},{TZ},{elevation}"
-        return formatted_location
+    OUTPUTS
+    ----------
+    formatted_location : string
+        formatted string for header line 1
 
-    def _get_design_conditions_string():
-        """create string for header line 2. Design conditions.
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+    """
+    formatted_location = f"LOCATION,{city},{region},{country},{data_type},{WMO_code},{latitude},{longitude},{TZ},{elevation}"
+    return formatted_location
 
-        Format: DESIGN CONDITIONS, N design conditions,
-            --- repeat for each design condition ---
-            source i,
-            "Heating"
-            ***
-            "Cooling"
-            ***
-            "Extremes"
-            ***
-            --- end repeat ---
-        ex: DESIGN CONDITIONS,1,Climate Design Data 2009 ASHRAE Handbook,,Heating,1,-2.3,-0.3,-10.9,1.5,2.9,-8.2,1.9,3.8,9.3,11.3,8.4,11.4,2.4,340,Cooling,7,10.3,36.2,24.7,35.1,24.8,34,24.6,26.9,32.7,26.4,32.1,25.9,31.4,3.1,240,25.5,20.9,29.4,25,20.2,29,24.4,19.5,28.5,84.7,32.6,82.3,32,80.1,31.6,758,Extremes,8,7,5.9,29.8,-5.8,37.8,1.7,1,-7,38.5,-8,39.1,-9,39.6,-10.3,40.3
+def _get_design_conditions_string():
+    """create string for header line 2. Design conditions.
 
-        INPUTS
-        ----------
+    Format: DESIGN CONDITIONS, N design conditions,
+        --- repeat for each design condition ---
+        source i,
+        "Heating"
+        ***
+        "Cooling"
+        ***
+        "Extremes"
+        ***
+        --- end repeat ---
+    ex: DESIGN CONDITIONS,1,Climate Design Data 2009 ASHRAE Handbook,,Heating,1,-2.3,-0.3,-10.9,1.5,2.9,-8.2,1.9,3.8,9.3,11.3,8.4,11.4,2.4,340,Cooling,7,10.3,36.2,24.7,35.1,24.8,34,24.6,26.9,32.7,26.4,32.1,25.9,31.4,3.1,240,25.5,20.9,29.4,25,20.2,29,24.4,19.5,28.5,84.7,32.6,82.3,32,80.1,31.6,758,Extremes,8,7,5.9,29.8,-5.8,37.8,1.7,1,-7,38.5,-8,39.1,-9,39.6,-10.3,40.3
 
-
-        OUTPUTS
-        ----------
-        formatted_design_conditions : string
-            formatted string for header line 2
-
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-        """
-        heating_design_conditions = f""
-        cooling_design_conditions = f""
-        extreme_design_conditions = f""
-        formatted_design_conditions = f"DESIGN CONDITIONS,{heating_design_conditions},{cooling_design_conditions},{extreme_design_conditions}"
-        return formatted_design_conditions
-
-    def _get_extreme_typical_periods_string():
-        """create string for header line 3. Extreme and typical periods.
-
-        Format: TYPICAL/EXTREME PERIODS,N periods,
-            --- repeat for each period ---
-            period name i
-            period type i
-            period start day  i
-            period end day i
-            --- end repeat ---
-        ex: TYPICAL/EXTREME PERIODS,6,Summer - Week Nearest Max Temperature For Period,Extreme,7/10,7/16,Summer - Week Nearest Average Temperature For Period,Typical,5/ 1,5/ 7,Winter - Week Nearest Min Temperature For Period,Extreme,12/20,12/26,Winter - Week Nearest Average Temperature For Period,Typical,1/ 4,1/10,Autumn - Week Nearest Average Temperature For Period,Typical,9/19,9/25,Spring - Week Nearest Average Temperature For Period,Typical,3/22,3/28
-
-        INPUTS
-        ----------
+    INPUTS
+    ----------
 
 
-        OUTPUTS
-        ----------
-        formatted_extreme_typical_periods : string
-            formatted string for header line 3
+    OUTPUTS
+    ----------
+    formatted_design_conditions : string
+        formatted string for header line 2
 
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-        """
-        formatted_extreme_typical_periods = f"TYPICAL/EXTREME PERIODS,"
-        return formatted_extreme_typical_periods
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+    """
+    heating_design_conditions = f""
+    cooling_design_conditions = f""
+    extreme_design_conditions = f""
+    formatted_design_conditions = f"DESIGN CONDITIONS,{heating_design_conditions},{cooling_design_conditions},{extreme_design_conditions}"
+    return formatted_design_conditions
 
-    def _get_ground_temps_string():
-        """create string for header line 4. Ground temperatures.
+def _get_extreme_typical_periods_string():
+    """create string for header line 3. Extreme and typical periods.
 
-        Format: GROUND TEMPERATURES,{N depths},
-            --- repeat for each depth ---
-            Depth i (m),
-            Soil Conductivity i (W/m-K),
-            Soil Density i (kg/m3),
-            Soil Specific Heat i (J/kg-K),
-            January Average Ground Temperature i (C),
-            February Average Ground Temperature i (C),
-            March Average Ground Temperature i (C),
-            April Average Ground Temperature i (C),
-            May Average Ground Temperature i (C),
-            June Average Ground Temperature i (C),
-            July Average Ground Temperature i (C),
-            August Average Ground Temperature i (C),
-            September Average Ground Temperature i (C),
-            October Average Ground Temperature i (C),
-            November Average Ground Temperature i (C),
-            December Average Ground Temperature i (C),
-            --- end repeat ---
-        ex: GROUND TEMPERATURES,6,0.5,1.5,2.5,3.5,4.5,5.5
+    Format: TYPICAL/EXTREME PERIODS,N periods,
+        --- repeat for each period ---
+        period name i
+        period type i
+        period start day  i
+        period end day i
+        --- end repeat ---
+    ex: TYPICAL/EXTREME PERIODS,6,Summer - Week Nearest Max Temperature For Period,Extreme,7/10,7/16,Summer - Week Nearest Average Temperature For Period,Typical,5/ 1,5/ 7,Winter - Week Nearest Min Temperature For Period,Extreme,12/20,12/26,Winter - Week Nearest Average Temperature For Period,Typical,1/ 4,1/10,Autumn - Week Nearest Average Temperature For Period,Typical,9/19,9/25,Spring - Week Nearest Average Temperature For Period,Typical,3/22,3/28
 
-        INPUTS
-        ----------
+    INPUTS
+    ----------
 
 
-        OUTPUTS
-        ----------
-        formatted_ground_temps : string
-            formatted string for header line 4
+    OUTPUTS
+    ----------
+    formatted_extreme_typical_periods : string
+        formatted string for header line 3
 
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-        """
-        formatted_ground_temps = f"GROUND TEMPERATURES,"
-        return formatted_ground_temps
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+    """
+    formatted_extreme_typical_periods = f"TYPICAL/EXTREME PERIODS,"
+    return formatted_extreme_typical_periods
 
-    def _get_holidays_daylight_savings_string():
-        """create string for header line 5. Holidays and daylight savings.
+def _get_ground_temps_string():
+    """create string for header line 4. Ground temperatures.
 
-        Format: HOLIDAYS/DAYLIGHT SAVINGS,
-            Use Holidays/DST (Yes or No),
-            Start Daylight Saving Time,
-            End Daylight Saving Time,
-            N Holidays
-            --- repeat for each holiday ---
-            Holiday Name i,
-            Holiday Date i,
-            --- end repeat ---
-        ex: HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0
+    Format: GROUND TEMPERATURES,{N depths},
+        --- repeat for each depth ---
+        Depth i (m),
+        Soil Conductivity i (W/m-K),
+        Soil Density i (kg/m3),
+        Soil Specific Heat i (J/kg-K),
+        January Average Ground Temperature i (C),
+        February Average Ground Temperature i (C),
+        March Average Ground Temperature i (C),
+        April Average Ground Temperature i (C),
+        May Average Ground Temperature i (C),
+        June Average Ground Temperature i (C),
+        July Average Ground Temperature i (C),
+        August Average Ground Temperature i (C),
+        September Average Ground Temperature i (C),
+        October Average Ground Temperature i (C),
+        November Average Ground Temperature i (C),
+        December Average Ground Temperature i (C),
+        --- end repeat ---
+    ex: GROUND TEMPERATURES,6,0.5,1.5,2.5,3.5,4.5,5.5
 
-        INPUTS
-        ----------
+    INPUTS
+    ----------
 
 
-        OUTPUTS
-        ----------
-        formatted_holidays_daylight_savings : string
-            formatted string for header line 5
+    OUTPUTS
+    ----------
+    formatted_ground_temps : string
+        formatted string for header line 4
 
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-        """
-        formatted_holidays_daylight_savings = f"HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0"
-        return formatted_holidays_daylight_savings
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+    """
+    formatted_ground_temps = f"GROUND TEMPERATURES,"
+    return formatted_ground_temps
 
-    def _format_data_periods(start_date, end_date):
-        """format data periods for header line 8. Shows # records per hour then
-        period name/description, start day of week, start month/day, end month/day
-        for each period if more than one. According to [1], multiple data periods
-        are not neccesary and may be detrimental to simulation results. Accordingly,
-        we assume 1 data period.
+def _get_holidays_daylight_savings_string():
+    """create string for header line 5. Holidays and daylight savings.
 
-        Format: DATA PERIODS,N periods,Records per hour
-            --- repeat for each period ---
-            i,
-            name/description i,
-            start day of week i,
-            start date i,
-            end date i
-            --- end repeat ---
-        ex: DATA PERIODS,1,1,Data,Sunday,1/1,12/31
+    Format: HOLIDAYS/DAYLIGHT SAVINGS,
+        Use Holidays/DST (Yes or No),
+        Start Daylight Saving Time,
+        End Daylight Saving Time,
+        N Holidays
+        --- repeat for each holiday ---
+        Holiday Name i,
+        Holiday Date i,
+        --- end repeat ---
+    ex: HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0
 
-        INPUTS
-        ----------
-        df : timeseries dataframe
-            dataframe with datetime index
+    INPUTS
+    ----------
 
-        OUTPUTS
-        ----------
-        formatted_data_periods : string
 
-        References:
-            [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
-            [2] https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html
-            [3] https://pvlib-python.readthedocs.io/en/stable/_modules/pvlib/iotools/epw.html
-        """
-        first_date_day_of_week = start_date.strftime("%A")
-        first_date_string = start_date.strftime("%m/%d")
-        last_date_string = end_date.strftime("%m/%d")
+    OUTPUTS
+    ----------
+    formatted_holidays_daylight_savings : string
+        formatted string for header line 5
 
-        formatted_data_periods = f"DATA PERIODS,1,1,My Data Period,{first_date_day_of_week}, {first_date_string},\
-        {last_date_string}"
-        return formatted_data_periods
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+    """
+    formatted_holidays_daylight_savings = f"HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0"
+    return formatted_holidays_daylight_savings
+
+def _format_data_periods(start_date, end_date):
+    """format data periods for header line 8. Shows # records per hour then
+    period name/description, start day of week, start month/day, end month/day
+    for each period if more than one. According to [1], multiple data periods
+    are not neccesary and may be detrimental to simulation results. Accordingly,
+    we assume 1 data period.
+
+    Format: DATA PERIODS,N periods,Records per hour
+        --- repeat for each period ---
+        i,
+        name/description i,
+        start day of week i,
+        start date i,
+        end date i
+        --- end repeat ---
+    ex: DATA PERIODS,1,1,Data,Sunday,1/1,12/31
+
+    INPUTS
+    ----------
+    df : timeseries dataframe
+        dataframe with datetime index
+
+    OUTPUTS
+    ----------
+    formatted_data_periods : string
+
+    References:
+        [1] https://designbuilder.co.uk/cahelp/Content/EnergyPlusWeatherFileFormat.htm
+        [2] https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html
+        [3] https://pvlib-python.readthedocs.io/en/stable/_modules/pvlib/iotools/epw.html
+    """
+    first_date_day_of_week = start_date.strftime("%A")
+    first_date_string = start_date.strftime("%m/%d")
+    last_date_string = end_date.strftime("%m/%d")
+
+    formatted_data_periods = f"DATA PERIODS,1,1,My Data Period,{first_date_day_of_week}, {first_date_string},\
+    {last_date_string}"
+    return formatted_data_periods
