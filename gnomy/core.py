@@ -206,6 +206,7 @@ class AMY:
         with open(target_path, "w") as f:
             for line in header_lines:
                 f.write(line + "\n")
+
             amy_df.to_csv(f, index=False, header=False)
 
         return
