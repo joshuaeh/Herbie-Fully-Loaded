@@ -201,7 +201,7 @@ class AMY:
         intermediate_df = self._intermediate_calculations(cache_df, latitude, longitude)
         amy_df = self._amy_data_df(intermediate_df)
         # create header
-        header_lines = self._create_header()
+        header_lines = create_header(self.start_date, self.end_date)
         # export data
         with open(target_path, "w") as f:
             f.write(header_lines)
