@@ -356,7 +356,10 @@ class AMY:
 
         return amy_df
 
-def create_header(start_date, end_date
+
+def create_header(
+    start_date,
+    end_date,
     # city,
     # state,
     # country,
@@ -401,7 +404,7 @@ def create_header(start_date, end_date
     # 7. comments 2
     string_7 = f"COMMENTS 2,"
     # 8. data periods
-    string_8 = 
+    string_8 = _get_data_periods_string(start_date, end_date)
 
     return [
         string_1,
@@ -413,6 +416,7 @@ def create_header(start_date, end_date
         string_7,
         string_8,
     ]
+
 
 def _get_location_string(
     city: str,
@@ -462,6 +466,7 @@ def _get_location_string(
     formatted_location = f"LOCATION,{city},{region},{country},{data_type},{WMO_code},{latitude},{longitude},{TZ},{elevation}"
     return formatted_location
 
+
 def _get_design_conditions_string():
     """create string for header line 2. Design conditions.
 
@@ -495,6 +500,7 @@ def _get_design_conditions_string():
     formatted_design_conditions = f"DESIGN CONDITIONS,{heating_design_conditions},{cooling_design_conditions},{extreme_design_conditions}"
     return formatted_design_conditions
 
+
 def _get_extreme_typical_periods_string():
     """create string for header line 3. Extreme and typical periods.
 
@@ -521,6 +527,7 @@ def _get_extreme_typical_periods_string():
     """
     formatted_extreme_typical_periods = f"TYPICAL/EXTREME PERIODS,"
     return formatted_extreme_typical_periods
+
 
 def _get_ground_temps_string():
     """create string for header line 4. Ground temperatures.
@@ -561,6 +568,7 @@ def _get_ground_temps_string():
     formatted_ground_temps = f"GROUND TEMPERATURES,"
     return formatted_ground_temps
 
+
 def _get_holidays_daylight_savings_string():
     """create string for header line 5. Holidays and daylight savings.
 
@@ -589,6 +597,7 @@ def _get_holidays_daylight_savings_string():
     """
     formatted_holidays_daylight_savings = f"HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0"
     return formatted_holidays_daylight_savings
+
 
 def _get_data_periods_string(start_date, end_date):
     """format data periods for header line 8. Shows # records per hour then
