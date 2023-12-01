@@ -286,61 +286,64 @@ class AMY:
         amy_df["albedo [nondim]"] = df["albedo"]
         amy_df["liquid precipitation depth [mm]"] = df["tp"].values
         amy_df["liquid precipitation quantity [hr]"] = 1
-        #TODO: check is this 1, or how long it has been precipitating?
-        return amy_df  
-    
-    def _create_header(
-        city,
-        state,
-        country,
-        data_type,
-        WMO_code,
-        latitude,
-        longitude,
-        TZ,
-        altitude,
-        heating_design_conditions,
-        cooling_design_conditions,
-        extreme_design_conditions,
-        extreme_hot_weeks,
-        extreme_cold_weeks,
-        typical_weeks,
-        monthly_ground_temps,
-        is_ip,
-        is_leap_year,
-        daylight_savings_start,
-        daylight_savings_end,
-        comments_1,
-        comments_2):
-        """The Header is the first 8 lines of the file. THey contain summary and context information.
-        1. (location): city, state, country, data type, WMO code, latitude, longitude, time zone, altitude
-        2. (design conditions): 
-        3. (typical/extreme periods):
-        4. (Ground temperatures):
-        5. (Holidays/daylight savings):
-        6. (Comments 1):
-        7. (Comments 2):
-        8. (Data periods)
-        
-        see: https://pvlib-python.readthedocs.io/en/stable/_modules/pvlib/iotools/epw.html
-        https://github.com/building-energy/epw
-        https://github.com/ladybug-tools/ladybug/blob/master/ladybug/epw.py
-        """
-        # 1. location
-        string_1_location = f"LOCATION,{city},{state},{country},{data_type},{WMO_code},{latitude},{longitude},{TZ},{altitude}\n"
-        # 2. design conditions
-    def _get_location_string(
-        city: str,
-        region: str,
-        country: str,
-        data_type: str,
-        WMO_code: str,
-        latitude: float,
-        longitude: float,
-        TZ: float,
-        elevation: float,
-    ):
-        """create string for header line 1. Location information.
+
+def create_header(start_date, end_date
+    # city,
+    # state,
+    # country,
+    # data_type,
+    # WMO_code,
+    # latitude,
+    # longitude,
+    # TZ,
+    # elevation,
+    # comments_1,
+    # comments_2,
+    # start_date,
+    # end_date
+):
+    """The Header is the first 8 lines of the file. THey contain summary and context information.
+    1. (location): city, state, country, data type, WMO code, latitude, longitude, time zone, altitude
+    2. (design conditions):
+    3. (typical/extreme periods):
+    4. (Ground temperatures):
+    5. (Holidays/daylight savings):
+    6. (Comments 1):
+    7. (Comments 2):
+    8. (Data periods)
+
+    see: https://pvlib-python.readthedocs.io/en/stable/_modules/pvlib/iotools/epw.html
+    https://github.com/building-energy/epw
+    https://github.com/ladybug-tools/ladybug/blob/master/ladybug/epw.py
+    """
+    # 1. location
+    # string_1 = f"LOCATION,{city},{state},{country},{data_type},{WMO_code},{latitude},{longitude},{TZ},{elevation}"
+    string_1 = f"LOCATION,"
+    # 2. design conditions
+    string_2 = f"DESIGN CONDITIONS,"
+    # 3. typical/extreme periods
+    string_3 = f"TYPICAL/EXTREME PERIODS,"
+    # 4. ground temperatures
+    string_4 = f"GROUND TEMPERATURES,"
+    # 5. holidays/daylight savings
+    string_5 = f"HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0"
+    # 6. comments 1
+    string_6 = f"COMMENTS 1,"
+    # 7. comments 2
+    string_7 = f"COMMENTS 2,"
+    # 8. data periods
+    string_8 = 
+
+    return [
+        string_1,
+        string_2,
+        string_3,
+        string_4,
+        string_5,
+        string_6,
+        string_7,
+        string_8,
+    ]
 
         Format: LOCATION,{city},{region},{country},{data type},{WMO code},{latitude},{longitude},{TZ},{altitude}
         ex: LOCATION,Maxwell Afb,AL,USA,TMY3,722265,32.38,-86.35,-6.0,53.0
