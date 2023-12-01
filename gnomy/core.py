@@ -141,7 +141,15 @@ class AMY:
         )
 
         # postprocess
-        self.post_process_cached_data()
+        self.post_process_cached_data(
+            self,
+            cache_dir,
+            amy_target_path,
+            self.start_date,
+            self.end_date,
+            self.latitude,
+            self.longitude,
+        )
 
         return
 
