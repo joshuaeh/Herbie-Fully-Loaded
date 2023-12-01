@@ -204,7 +204,8 @@ class AMY:
         header_lines = create_header(self.start_date, self.end_date)
         # export data
         with open(target_path, "w") as f:
-            f.write(header_lines)
+            for line in header_lines:
+                f.write(line + "\n")
             amy_df.to_csv(f, index=False, header=False)
 
         return
