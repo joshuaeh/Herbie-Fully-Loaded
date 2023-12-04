@@ -127,7 +127,7 @@ class AMY:
         # TODO: add check for 1 complete year of data. or figrue how to account for less than a full year
         # TODO: design so that preprocessing/downloading and subsequent processing can be done separately
         # preprocess
-        self.preprocess(cache_dir)
+        self.preprocess(cache_dir, start_date, end_date, self.latitude, self.longitude)
 
         # download and cache analysis data
         utils.get_grib_data(
