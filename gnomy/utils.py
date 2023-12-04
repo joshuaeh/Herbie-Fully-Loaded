@@ -22,6 +22,8 @@ import pytz
 
 from . import constants
 
+# declarations
+
 
 # functions
 ## Data Acquisition
