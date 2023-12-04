@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 import datetime
 import glob
 import os
+import warnings
 
 from herbie import Herbie
 from joblib import delayed, Parallel
@@ -23,6 +24,13 @@ import pytz
 from . import constants
 
 # declarations
+warnings.filterwarnings(
+    "ignore", message="More than one time coordinate present for variable  "
+)  # warning from parsing grib files
+warnings.filterwarnings(
+    "ignore",
+    message="Calling float on a single element Series is deprecated and will raise a TypeError in the future. Use float(ser.iloc[0]) instead",
+)  # warning from Herbie. TODO: update Herbie to fix this
 
 
 # functions
