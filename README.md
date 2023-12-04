@@ -79,3 +79,23 @@ Below is a table of the values used, their limits, conventions for missing data,
 | 32 | Albedo |  |  |  | 999 |  | Estimated using the land use category. See [9] |
 | 33 | Liquid Precipitation Depth | mm |  |  | 999 |  | NOAA *1 hour forecast* Total Precipitation. See [9] |
 | 34 | Liquid Precipitation Quantity | hr |  |  | 99 |  | Calculated. The interval 33 accumulates over, which is 1 hour. |
+
+In summary, the following values are used by EnergyPlus:
+
+
+
+The following variables are provided directly by NOAA analysis:
+
+
+
+The following variables are estimated using NOAA 1h forecasts:
+
+
+
+The following variables are calculated or estimated:
+
+
+
+### Notes
+
+#### 1) Calculating Extraterrestrial Horizontal Radiation
