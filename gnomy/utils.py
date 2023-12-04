@@ -48,8 +48,8 @@ def get_search_string(list_of_searches):
     search_string : str
         search string for herbie
     """
-    mid_string = ")|(".join(list_of_searches)
-    return "(" + mid_string + ")"
+    mid_string = "|".join(list_of_searches)
+    return "(?:" + mid_string + ")"
 
 
 def parse_xarray_data(xarray_data, latitude, longitude):
