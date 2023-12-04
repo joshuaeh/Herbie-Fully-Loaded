@@ -82,13 +82,15 @@ def get_grib_hour_data(grib_dt, search_string_0h, search_string_1h, latitude, lo
             grib_dt,
             model='hrrr',
             product='sfc',
-            fxx=0
+            fxx=0,
+            verbose=False
         )
         H1 = Herbie(
             grib_dt - datetime.timedelta(hours=1),
             model='hrrr',
             product='sfc',
-            fxx=1
+            fxx=1,
+            verbose=False
         )
         logger.debug("Using XARRAY")
         H0_data = H0.xarray(searchString=search_string_0h)
