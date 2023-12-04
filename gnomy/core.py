@@ -45,15 +45,15 @@ class AMY:
         """
         # validate inputs
         assert (
-            21.14 <= self.latitude <= 52.6
+            21.14 <= latitude <= 52.6
         ), "latitude must be between 21.14 N and 52.6 N for HRRR"
-        assert (225.9 <= self.longitude <= 299) or (
-            -134.1 <= self.longitude <= -61
+        assert (225.9 <= longitude <= 299) or (
+            -134.1 <= longitude <= -61
         ), "longitude must be between (225.9 - 299) or (-134.1 - -61) for HRRR"
 
         # transform longitude if neccessary
-        if self.longitude < 0:
-            self.longitude = 360 + self.longitude
+        if longitude < 0:
+            longitude = 360 + longitude
 
         # general parameters
         self.latitude = latitude
