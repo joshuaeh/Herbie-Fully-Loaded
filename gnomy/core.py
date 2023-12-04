@@ -153,7 +153,7 @@ class AMY:
 
         return
 
-    def preprocess(self, cache_dir, start_date, latitude, longitude):
+    def preprocess(self, cache_dir, start_date, end_date, latitude, longitude, freq="1H"):
         """Prepare for AMY Generation and  initialize data structures
         1. create site cache directory
         2. identify uncached dates
@@ -161,7 +161,7 @@ class AMY:
         4. estimate coordinate projection components
         """
         self.site_cache_dir = self._prep_chache_dir(cache_dir)
-        self.uncached_dates = self._identify_uncached_dates(cache_dir)
+        self.uncached_dates = self._identify_uncached_dates(cache_dir, start_date, end_date, freq="1H")
         self.search_string_0h = utils.get_search_string(
             [i.get("searchstring") for i in constants._grib_variables_0h.values()]
         )
