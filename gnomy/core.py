@@ -130,15 +130,18 @@ class AMY:
         self.preprocess(cache_dir, start_date, end_date, self.latitude, self.longitude)
 
         # download and cache analysis data
-        utils.get_grib_data(
-            self.uncached_dates,
-            self.latitude,
-            self.longitude,
-            self.search_string_0h,
-            self.search_string_1h,
-            n_workers,
-            self.site_cache_dir,
-        )
+        while self.uncached_dates:
+            utils.get_grib_data(
+                self.uncached_dates,
+                self.latitude,
+                self.longitude,
+                self.search_string_0h,
+                self.search_string_1h,
+                n_workers,
+                self.site_cache_dir,
+            )
+            
+            self.uncached_dates = self._identify_uncached_dates(cache_dir, start_date, end_date, freq="1H")
 
         # postprocess
         self.post_process_cached_data(
