@@ -128,9 +128,12 @@ def get_grib_data(grib_datetimes, latitude, longitude, search_string_0h, search_
             return grib_datetime
     
     # download data
-    out = Parallel(n_jobs=n_jobs)(
-        delayed(grib_download_wrapper)(i) for i in grib_datetimes
-    )
+    try:
+        out = Parallel(n_jobs=n_jobs)(
+            delayed(grib_download_wrapper)(i) for i in grib_datetimes
+        )
+    except Exception as e:
+        logging.debug(e)
     
     return [i for i in out if i is not None]
     
