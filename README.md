@@ -41,7 +41,7 @@ Each line contains contextual information about the location and weather. See [C
 
 The columns of an AMY file are not labeled within the file itself. [The energy plus documentation](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html) identifies many if the fields of interest.
 
-Below is a table of the values used, their limits, conventions for missing data, and the source of the data using gnomy
+Below is a table of the values used, their limits, conventions for missing data, and the source of the data using gnomy. Values in **bold** are used by EnergyPlus
 
 | Field | Name | Units | Min. | Max. | Missing | Used in Energy Plus | gnomy source |
 |-------|------|-------|------|------|---------|---------------------|--------------|
