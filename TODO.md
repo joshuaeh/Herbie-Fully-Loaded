@@ -12,3 +12,4 @@ the goal of this project is to publish on our method to take NOAA data and creat
 [] Run the code for each net load forecasting location 2022, through July 2023
 [] Improve documentation or write documentation or write what you dont understand
 [] Package it up for pip installation
+[] Check units on all variables
