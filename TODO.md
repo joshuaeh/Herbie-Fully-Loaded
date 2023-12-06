@@ -13,3 +13,5 @@ the goal of this project is to publish on our method to take NOAA data and creat
 [] Improve documentation or write documentation or write what you dont understand
 [] Package it up for pip installation
 [] Check units on all variables
+## Go through ashrae fundamentals handbook to find how they calculate heating, cooling, and extreme days
+## same but with ground temperature and other variables
