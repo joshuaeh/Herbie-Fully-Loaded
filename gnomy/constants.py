@@ -3,7 +3,9 @@
 
 # Constants
 ## Default Values
-
+## HVAC stuff
+HEAT_TEMP = 18.3
+COOL_TEMP =  23
 
 ## HRRR stuff
 HRRR_first_year = 2014  # https://rapidrefresh.noaa.gov/hrrr/ notes archives go back to 2014
