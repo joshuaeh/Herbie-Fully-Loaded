@@ -163,7 +163,7 @@ class AMY:
         3. create search strings
         4. estimate coordinate projection components
         """
-        self.site_cache_dir = self._prep_chache_dir(cache_dir)
+        self.site_cache_dir = self._prep_cache_dir(cache_dir)
         self.uncached_dates = self._identify_uncached_dates(cache_dir, start_date, end_date, freq="1H")
         self.search_string_0h = utils.get_search_string(
             [i.get("searchstring") for i in constants._grib_variables_0h.values()]
@@ -176,7 +176,7 @@ class AMY:
         )
         return
 
-    def _prep_chache_dir(self, cache_dir):
+    def _prep_cache_dir(self, cache_dir):
         """create cache directory and subdirectory for site"""
         os.makedirs(cache_dir, exist_ok=True)
         site_cache_dir = os.path.join(cache_dir, self.name)
