@@ -1,4 +1,4 @@
-# GNOMY
+# GNOMY / Herbie Fully Loaded
 
 A Python package for weather data gathering for further use.
 
@@ -6,7 +6,24 @@ A Python package for weather data gathering for further use.
 
 ## Quick Start
 
+### Installation
 
+Due to dependencies, the best way to install the project is using conda:
+
+```bash
+conda 
+```
+
+Otherwise, installation can occur with pip so long as the dependencies listed below are fulfilled:
+
+```bash
+pip install XXXXXXXXXXX
+```
+
+- Python 3.10+
+- [cURL](https://anaconda.org/conda-forge/curl)
+- [eccodes](https://anaconda.org/conda-forge/eccodes) a dependency of [cfgrib](https://anaconda.org/conda-forge/cfgrib)
+- *Optional:* [wgrib2](https://anaconda.org/conda-forge/wgrib2)
 
 ## Info
 
