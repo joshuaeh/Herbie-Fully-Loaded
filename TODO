@@ -1,0 +1,21 @@
+[] Environment w/ Herbie requirements... Conda?
+
+[] Class
+    [] Initialize Arguments
+        [] Location
+        [] Variables
+        [] Time (same daily, etc., actual)
+    [] Gather Data
+        [] Arguments
+        [] Manage workers and temporary Data
+    [] Post-process and Export Data
+[] Pyproject.toml
+[] Documentation
+    [] Sphinx
+    [] Docstrings etc
+    [] readthedocs
+    [] GitHub Pages
+[] Tests
+    [] Unit Tests
+    [] Integration Tests
+    [] Test Coverage
