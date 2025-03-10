@@ -48,8 +48,8 @@ def get_search_string(list_of_searches):
     search_string : str
         search string for herbie
     """
-    mid_string = "|".join(list_of_searches)
-    return "(?:" + mid_string + ")"
+    mid_string = ")|(".join(list_of_searches)
+    return "?:(" + mid_string + ")"
 
 
 def parse_xarray_data(xarray_data, latitude, longitude):
@@ -111,8 +111,8 @@ def get_grib_hour_data(
         df = pd.DataFrame(data=analysis_data, index=[grib_dt])
         return df
     except Exception as e:
-        print(e)
-    return None
+        logger.debug("exception:" + e)
+        return None
 
 
 def get_grib_data(
@@ -134,24 +134,30 @@ def get_grib_data(
     ----------
     list of datetimes with errors
     """
+    logger.debug("Starting get_grib_data")
 
     def grib_download_wrapper(grib_datetime):
         """wrapper for grib_download"""
+        logger.debug(f"starting: grib_datetime.strftime('%Y%m%d%H%M%S')")
         save_path = os.path.join(cache_dir, grib_datetime.strftime("%Y%m%d%H%M%S.csv"))
         df = get_grib_hour_data(
             grib_datetime, search_string_0h, search_string_1h, latitude, longitude
         )
         if df is not None:
             df.to_csv(save_path)
+            logger.debug(f"Saving: grib_datetime.strftime('%Y%m%d%H%M%S')")
             return None
         else:
+            logger.debug(f"Failed: grib_datetime.strftime('%Y%m%d%H%M%S')")
             return grib_datetime
 
     # download data
     try:
+        logging.debug("--get_grib_data: Starting Parallel")
         out = Parallel(n_jobs=n_jobs)(
             delayed(grib_download_wrapper)(i) for i in grib_datetimes
         )
+        logging.debug(f"--get_grib_data: finished Parallel")
     except Exception as e:
         logging.debug(e)
 
@@ -161,14 +167,16 @@ def get_grib_data(
 def combine_cache_files(cache_dir, start_date, end_date, freq):
     all_dates = pd.date_range(start_date, end_date, freq=freq)
     all_cache_file_paths = [
-        os.path.join(cache_dir, i.strftime("%Y%m%d%H%M.csv")) for i in all_dates
+        os.path.join(cache_dir, i.strftime("%Y%m%d%H%M%S.csv")) for i in all_dates
     ]
     all_cache_file_paths.sort()
     cache_dfs = []
     for data_file in all_cache_file_paths:
         cache_dfs.append(pd.read_csv(data_file, index_col=0))
     cache_df = pd.concat(cache_dfs)
-    cache_df.index = pd.to_datetime(cache_df.index)
+    cache_df.index = pd.to_datetime(
+        all_dates,
+    )
     cache_df.sort_index(inplace=True)
     return cache_df
 
@@ -423,8 +431,8 @@ def get_wind_direction(e, n):
     wind direction (degrees)
     """
     deg = np.rad2deg(np.arctan2(e, n))
-    if deg < 0:
-        deg = 360 + deg
+    # if deg < 0:
+    #     deg = 360 + deg
     return deg
 
 

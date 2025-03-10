@@ -2,7 +2,7 @@
 # Author: Joshua Hammond
 # Date: 2023-07-26
 # TODO fix docstrings
-# TODO make flexible for 15 min/1 hr
+# TODO make flexible for 15 min/1 hr/3 hr
 
 # imports
 ## standard library
@@ -119,17 +119,23 @@ class AMY:
         elif year is not None:
             assert start_date is None, "cannot provide both year and start_date"
             assert end_date is None, "cannot provide both year and end_date"
-            self.start_date = datetime.datetime(year, 1, 1)
-            self.end_date = datetime.datetime(year, 12, 31)
+            start_date = datetime.datetime(year, 1, 1)
+            end_date = datetime.datetime(year, 12, 31)
         assert (
             start_date.year >= constants.HRRR_first_year
         ), f"First year of HRRR data is {constants.HRRR_first_year}"
         # TODO: add check for 1 complete year of data. or figrue how to account for less than a full year
         # TODO: design so that preprocessing/downloading and subsequent processing can be done separately
         # preprocess
-        self.preprocess(cache_dir, start_date, end_date, self.latitude, self.longitude)
+        self.preprocess(
+            cache_dir, start_date, end_date, self.latitude, self.longitude, freq="H"
+        )
 
         # download and cache analysis data
+        self.uncached_dates = self._identify_uncached_dates(
+            cache_dir, start_date, end_date, freq="H"
+        )
+
         while self.uncached_dates:
             utils.get_grib_data(
                 self.uncached_dates,
@@ -140,31 +146,36 @@ class AMY:
                 n_workers,
                 self.site_cache_dir,
             )
-            
-            self.uncached_dates = self._identify_uncached_dates(cache_dir, start_date, end_date, freq="1H")
+
+            self.uncached_dates = self._identify_uncached_dates(
+                cache_dir, start_date, end_date, freq="1H"
+            )
 
         # postprocess
         self.post_process_cached_data(
-            self,
             cache_dir,
             amy_target_path,
-            self.start_date,
-            self.end_date,
+            start_date,
+            end_date,
             self.latitude,
             self.longitude,
         )
 
         return
 
-    def preprocess(self, cache_dir, start_date, end_date, latitude, longitude, freq="1H"):
+    def preprocess(
+        self, cache_dir, start_date, end_date, latitude, longitude, freq="H"
+    ):
         """Prepare for AMY Generation and  initialize data structures
         1. create site cache directory
         2. identify uncached dates
         3. create search strings
         4. estimate coordinate projection components
         """
-        self.site_cache_dir = self._prep_chache_dir(cache_dir)
-        self.uncached_dates = self._identify_uncached_dates(cache_dir, start_date, end_date, freq="1H")
+        self.site_cache_dir = self._prep_cache_dir(cache_dir)
+        self.uncached_dates = self._identify_uncached_dates(
+            cache_dir, start_date, end_date, freq=freq
+        )
         self.search_string_0h = utils.get_search_string(
             [i.get("searchstring") for i in constants._grib_variables_0h.values()]
         )
@@ -176,7 +187,7 @@ class AMY:
         )
         return
 
-    def _prep_chache_dir(self, cache_dir):
+    def _prep_cache_dir(self, cache_dir):
         """create cache directory and subdirectory for site"""
         os.makedirs(cache_dir, exist_ok=True)
         site_cache_dir = os.path.join(cache_dir, self.name)
@@ -191,7 +202,7 @@ class AMY:
             i
             for i in all_dates
             if not os.path.exists(
-                os.path.join(specified_dir, i.strftime("%Y%m%d%H%M.csv"))
+                os.path.join(specified_dir, i.strftime("%Y%m%d%H%M%S.csv"))
             )
         ]
         return uncached_dates
@@ -212,7 +223,7 @@ class AMY:
         intermediate_df = self._intermediate_calculations(cache_df, latitude, longitude)
         amy_df = self._amy_data_df(intermediate_df)
         # create header
-        header_lines = create_header(self.start_date, self.end_date)
+        header_lines = create_header(start_date, end_date)
         # export data
         with open(target_path, "w") as f:
             for line in header_lines:
@@ -236,12 +247,12 @@ class AMY:
         )
         intermediate_df[
             "extraterrestrial_normal_radiation"
-        ] = utils.calculate_extraterrestrial_normal_radiation(
+        ] = utils.get_extraterrestrial_direct_normal_radiation(
             intermediate_df.index.dayofyear
         )
         intermediate_df[
             "extraterrestrial_horizontal_irradiance"
-        ] = utils.calculate_extraterrestrial_horizontal_irradiance(
+        ] = utils.get_extraterrestrial_horizontal_radiation(
             intermediate_df["zenith"].values,
             intermediate_df["extraterrestrial_normal_radiation"].values,
         )

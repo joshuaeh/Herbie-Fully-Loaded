@@ -1,0 +1,17 @@
+[project]
+name = "herbie-fully-loaded"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "joshuaeh", email = "joshua.hammond@utexas.edu" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+herbie-fully-loaded = "herbie_fully_loaded:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
